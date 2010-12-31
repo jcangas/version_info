@@ -1,3 +1,7 @@
+## Install
+
+    gem install version_info
+
 ## Usage:
 
 

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jorge L. Cangas"]
   s.email       = ["jorge.cangas@gmail.com"]
-  s.homepage    = "http://rubygems.org/gems/version_info"
+  s.homepage    = "http://github.com/jcangas/version_info"
   s.summary     = %q{A Ruby gem to manage your project version data}
   s.description = %q{Easy way to get version label, bump the segments (major, minor, patch), and you can include custom version data}
 
