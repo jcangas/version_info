@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    version_info (0.2.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    notifier (0.1.1)
+    rspec (2.3.0)
+      rspec-core (~> 2.3.0)
+      rspec-expectations (~> 2.3.0)
+      rspec-mocks (~> 2.3.0)
+    rspec-core (2.3.1)
+    rspec-expectations (2.3.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.3.0)
+    test_notifier (0.3.6)
+      notifier
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rspec
+  test_notifier
+  version_info!
