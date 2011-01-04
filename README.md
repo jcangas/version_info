@@ -1,8 +1,13 @@
-## Install
+### Overview
 
-    gem install version_info
+  VersionIinfo is a powerful and very lightweight gem to manage version data in your Ruby projects or other gems.
+  VersionIinfo can manage a serie of predefined segments to build your version tag with the tipical structure X.X.X.X.
+  The values are stored in a yaml file, and supports custom values. Also, rake tasks are avaiable to simplify yaml file 
+  creation and updates.
 
-## Usage:
+  Feel free to contact me about bugs/features
+
+### Usage
 
 
 Include VersionInfo in your main project module (or class):
@@ -37,14 +42,14 @@ for use as the "segments" of the version tag:
 
 Usingh the previous version_info.yml:
 
-    puts MyProject::VERSION.tag
+    puts MyProject::VERSION
 
     => 0.1.0
 
 Also you can bump any segment. With the same sample:
 
     MyProject::VERSION.bump(:major)
-    puts MyProject::VERSION.tag
+    puts MyProject::VERSION
 
     => 1.0.0
 
@@ -61,13 +66,15 @@ And you get a few tasks within namespace vinfo:
 
     rake -T
     =>
-    rake build        # Build version_info-0.4.0.gem into the pkg directory
-    rake install      # Build and install version_info-0.4.0.gem into system gems
-    rake release      # Create tag v0.4.0 and build and push version_info-0.4.0.gem to Rubygems
     rake vinfo:build  # Bumps version segment BUILD
     rake vinfo:major  # Bumps version segment MAJOR
     rake vinfo:minor  # Bumps version segment MINOR
     rake vinfo:patch  # Bumps version segment PATCH
     rake vinfo:pre    # Bumps version segment PRE
     rake vinfo:show   # Show current version tag and create version_info.yml if missing
+
+### Install
+
+    gem install version_info
+
 
