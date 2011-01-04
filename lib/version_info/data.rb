@@ -1,19 +1,22 @@
 require 'ostruct'
+require 'yaml'
+
 module VersionInfo
   class Data < OpenStruct
-    attr_accessor :file_name	
+    class << self
+      attr_accessor :file_name	
+      def file_name
+        @file_name ||= Dir.pwd + '/' + underscore(self.name) +  '_info.yml'
+      end
+    end
 
     def initialize
       super
-      if File.exist?(file_name)
+      if File.exist?(self.class.file_name)
         load
       else
         marshal_load(get_defaults)
       end
-    end
-
-    def file_name
-      @file_name ||= 'version_info.yml'
     end
 
     def bump(key)
@@ -26,13 +29,17 @@ module VersionInfo
     end
     
     def load
-      load_from(File.read(file_name))
+      load_from(File.read(self.class.file_name))
 	    self
     end
 
     def save      
-	    File.open( file_name, 'w' ) {|out| save_to(out)}
+	    File.open(self.class.file_name, 'w' ) {|out| save_to(out)}
 	    self
+    end
+
+    def to_s
+      tag
     end
 
     def tag
@@ -53,8 +60,18 @@ module VersionInfo
 
     def save_to(io)
 	    values = self.marshal_dump.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
-      YAML.dump(values, io )
+      YAML.dump(values, io)
 	    self      
+    end
+
+    def self.underscore(camel_cased_word)
+      word = camel_cased_word.to_s.dup
+      word.gsub!(/::/, '/')
+      word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+      word.tr!("-", "_")
+      word.downcase!
+      word
     end
   end
 end

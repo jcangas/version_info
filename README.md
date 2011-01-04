@@ -48,5 +48,26 @@ Also you can bump any segment. With the same sample:
 
     => 1.0.0
 
-Note the other segments are reset to 0 after bump.
-    
+Note the other (lower) segments are reset to 0 after bump.
+
+
+### Rake tasks
+
+Put in your rake file:
+
+    VersionInfo::Tasks.install
+
+And you get a few tasks within namespace vinfo:
+
+    rake -T
+    =>
+    rake build        # Build version_info-0.4.0.gem into the pkg directory
+    rake install      # Build and install version_info-0.4.0.gem into system gems
+    rake release      # Create tag v0.4.0 and build and push version_info-0.4.0.gem to Rubygems
+    rake vinfo:build  # Bumps version segment BUILD
+    rake vinfo:major  # Bumps version segment MAJOR
+    rake vinfo:minor  # Bumps version segment MINOR
+    rake vinfo:patch  # Bumps version segment PATCH
+    rake vinfo:pre    # Bumps version segment PRE
+    rake vinfo:show   # Show current version tag and create version_info.yml if missing
+

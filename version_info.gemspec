@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
+require "version_info"
 require "version_info/version"
 
 Gem::Specification.new do |s|
@@ -9,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Jorge L. Cangas"]
   s.email       = ["jorge.cangas@gmail.com"]
   s.homepage    = "http://github.com/jcangas/version_info"
-  s.summary     = %q{A Ruby gem to manage your project version data}
+  s.summary     = %q{A Ruby gem to manage your project version data. Rake tasks included!}
   s.description = %q{Easy way to get version label, bump the segments (major, minor, patch), and you can include custom version data}
 
   s.rubyforge_project = "version_info"

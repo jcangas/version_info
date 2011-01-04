@@ -7,8 +7,10 @@ module VersionInfo
     [:major, :minor, :patch, :pre, :build]
   end
    
-  def self.included(other)         
-    other.const_set('VERSION', Data.new)
+  def self.included(other)
+    data = Class.new(Data)
+    other.const_set('Version', data)
+    other.const_set('VERSION', data.new)
   end
 
   autoload :Tasks, 'version_info/tasks'
