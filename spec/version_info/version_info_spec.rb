@@ -14,7 +14,7 @@ describe "VersionInfo" do
   end
 
   it "has default filename" do
-    TestFile::Version.file_name.should ==  Dir.pwd + '/test_file/version_info.yml'
+    TestFile::VERSION.file_name.should ==  Dir.pwd + '/test_file/version_info.yml'
   end
 
   it "can assign filename" do
