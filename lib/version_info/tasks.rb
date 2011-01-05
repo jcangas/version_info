@@ -16,6 +16,12 @@ module VersionInfo
 
     def install
       namespace :vinfo do
+
+        desc "Inspect all current version keys"
+        task :inspect do
+          puts target::VERSION.inspect
+        end
+
         desc "Show current version tag and create version_info.yml if missing"
         task :show do
           puts target::VERSION.tag
