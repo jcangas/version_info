@@ -1,31 +1,33 @@
 module VersionInfo
   class Tasks
-    def self.install(opts = nil)
+    def self.install(opts = {})
       #dir = caller.find{|c| /Rakefile:/}[/^(.*?)\/Rakefile:/, 1]
       dir = File.dirname(Rake.application.rakefile_location)
-      self.new(dir).install
+      self.new(dir, opts).install
     end
     
     attr_reader :root_path
+    attr_reader :target
 
-    def initialize(root_path)
+    def initialize(root_path, opts)
       @root_path = root_path
+      @target = opts[:class]
     end
 
     def install
       namespace :vinfo do
         desc "Show current version tag and create version_info.yml if missing"
         task :show do
-          puts VERSION.tag
-          VERSION.save unless File.exist?(VERSION.class.file_name)
+          puts target::VERSION.tag
+          target::VERSION.save unless File.exist?(target::VERSION.class.file_name)
         end
         
         VersionInfo.segments.each do |sgm|
           desc "Bumps version segment #{sgm.to_s.upcase}"
           task sgm.to_sym do
-            VERSION.bump(sgm)
+            target::VERSION.bump(sgm)
             puts "version changed to #{VERSION.tag}"
-            VERSION.save
+            target::VERSION.save
           end
         end
       end
