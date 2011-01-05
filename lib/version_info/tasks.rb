@@ -21,7 +21,7 @@ module VersionInfo
         end
         
         VersionInfo.segments.each do |sgm|
-          desc "Bumps version segment #{sgm.upcase}"
+          desc "Bumps version segment #{sgm.to_s.upcase}"
           task sgm.to_sym do
             VERSION.bump(sgm)
             puts "version changed to #{VERSION.tag}"
