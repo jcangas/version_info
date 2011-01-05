@@ -25,7 +25,7 @@ module VersionInfo
         desc "Show current version tag and create version_info.yml if missing"
         task :show do
           puts target::VERSION.tag
-          target::VERSION.save unless File.exist?(target::VERSION.class.file_name)
+          target::VERSION.save unless File.exist?(target::VERSION.file_name)
         end
         
         VersionInfo.segments.each do |sgm|
