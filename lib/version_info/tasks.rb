@@ -26,7 +26,7 @@ module VersionInfo
           desc "Bumps version segment #{sgm.to_s.upcase}"
           task sgm.to_sym do
             target::VERSION.bump(sgm)
-            puts "version changed to #{VERSION.tag}"
+            puts "version changed to #{target::VERSION}"
             target::VERSION.save
           end
         end
