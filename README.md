@@ -1,3 +1,5 @@
+## VersionInfo
+
 ### Overview
 
   VersionIinfo is a powerful and very lightweight gem to manage version data in your Ruby projects or other gems.
@@ -19,7 +21,7 @@ Include VersionInfo in your main project module (or class):
 
     end
 
-Create a file to store your version data. By default the file is named version_info.yml:
+Create a file to store your version data:
 
     --- 
     major: 0
@@ -27,6 +29,13 @@ Create a file to store your version data. By default the file is named version_i
     patch: 0
     author: jcangas
 
+By default the file is named version_info.yml and stored near the main file with the include VersionIinfo thing.
+
+Anyway you can change this:
+    module MyProject
+      include VersionInfo
+      VERISION.file_name = '/path/to/my_file.yaml'      
+    end
 
 Note you can put any custom data. In order to get the version tag, VersionInfo reserve some special keys
 for use as the "segments" of the version tag:
