@@ -21,7 +21,9 @@ Include VersionInfo in your main project module (or class):
 
     end
 
-Create a file to store your version data:
+From here, is better to use the builtin rake tasks (see it fordward). Here is how VersionInfo works and their user options:
+
+VersionInfo use yaml file to store version data:
 
     --- 
     major: 0
@@ -31,7 +33,7 @@ Create a file to store your version data:
 
 By default the file is named version_info.yml and stored near the main file with the include VersionIinfo thing.
 
-Anyway you can change this:
+Anyway, you can change this:
     module MyProject
       include VersionInfo
       VERISION.file_name = '/path/to/my_file.yaml'      
@@ -71,16 +73,19 @@ Put in your rake file:
 
     VersionInfo::Tasks.install(MyProject) # pass here the thing where you included VersionInfo
 
-And you get a few tasks within namespace vinfo:
+And you get a few tasks with a namespace vinfo:
 
     rake -T
     =>
     rake vinfo:build  # Bumps version segment BUILD
+    rake vinfo:inspect  # Inspect all current version keys
     rake vinfo:major  # Bumps version segment MAJOR
     rake vinfo:minor  # Bumps version segment MINOR
     rake vinfo:patch  # Bumps version segment PATCH
     rake vinfo:pre    # Bumps version segment PRE
     rake vinfo:show   # Show current version tag and create version_info.yml if missing
+
+Note vinfo:inspect allows you check your custom keys also.
 
 ### Install
 
