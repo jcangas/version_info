@@ -71,7 +71,7 @@ Note the other (lower) segments are reset to 0 after bump.
 
 Put in your rake file:
 
-    VersionInfo::Tasks.install(MyProject) # pass here the thing where you included VersionInfo
+    VersionInfo::Tasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
 
 And you get a few tasks with a namespace vinfo:
 
