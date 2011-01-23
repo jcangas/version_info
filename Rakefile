@@ -8,7 +8,7 @@ require 'version_info'
 require 'version_info/version'
 
 
-VersionInfo::Tasks.install(:class => VersionInfo)
+VersionInfo::RakeTasks.install(:class => VersionInfo)
 # now we have VersionInfo::VERSION defined, can load this
 Bundler::GemHelper.install_tasks
 

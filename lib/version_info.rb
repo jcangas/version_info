@@ -4,7 +4,7 @@ module VersionInfo
 
 
   def self.segments
-    [:major, :minor, :patch, :pre, :build]
+    [:major, :minor, :patch, :state, :build]
   end
    
   def self.included(other)
@@ -13,7 +13,8 @@ module VersionInfo
     other.const_set('VERSION', data.new)
   end
 
-  autoload :Tasks, 'version_info/tasks'
+  autoload :RakeTasks, 'version_info/tasks'
+  autoload :ThorTasks, 'version_info/tasks'
 
 end
 

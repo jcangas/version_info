@@ -8,6 +8,14 @@ describe "VersionInfo" do
       include VersionInfo # force new VERSION data
     end
   end
+  after :each do
+    module TestFile
+      remove_const :VERSION
+      remove_const :Version
+    end
+  end
+    
+
 
   it "is initalized" do
     TestFile::VERSION.marshal_dump.should == {:major => 0, :minor => 0, :patch => 0 }

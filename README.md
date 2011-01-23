@@ -4,8 +4,7 @@
 
   VersionIinfo is a powerful and very lightweight gem to manage version data in your Ruby projects or other gems.
   VersionIinfo can manage a serie of predefined segments to build your version tag with the tipical structure X.X.X.X.
-  The values are stored in a yaml file, and supports custom values. Also, rake tasks are avaiable to simplify yaml file 
-  creation and updates.
+  The values are stored in a yaml file, and supports custom values. Also, rake & thor tasks are   avaiable to simplify yaml file creation and update.
 
   Feel free to contact me about bugs/features
 
