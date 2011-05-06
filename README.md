@@ -21,9 +21,9 @@ Include VersionInfo in your main project module (or class):
       include VersionInfo
     end
 
-From here, is better to use the builtin rake/thor tasks (see it fordward). Here is how VersionInfo works and their user options:
+From here, is better to use the builtin rake/thor tasks (see it forward). Here is how VersionInfo works and their user options:
 
-After you included VersionIinfo, a new class MyProject::Version is defined (it inherit from VersionIinfo::Data). Also a new constant MyProject::VERSION is created holding an object of class MyProject::VersionIinfo.
+After you included VersionIinfo, a new constant MyProject::VERSION is created holding an object of class VersionInfo::Data
 
 VersionInfo use yaml file to store version data:
 
@@ -33,9 +33,10 @@ VersionInfo use yaml file to store version data:
     patch: 0
     author: jcangas
 
-By default the file is named version_info.yml and stored near the main file with the include VersionIinfo thing.
+By default the file is named version_info.yml and stored in the current dir, useful
+when using Rake or Thor.
 
-Anyway, you can change this:
+Anyway, you can change this (recomended):
     module MyProject
       include VersionInfo
       VERISION.file_name = '/path/to/my_file.yaml'      
@@ -84,7 +85,7 @@ And you get a few tasks with a namespace vinfo:
     rake vinfo:patch  # Bumps version segment PATCH
     rake vinfo:show   # Show current version tag and create version_info.yml if missing
 
-Or, if you prefer Thor:
+If you prefer Thor:
 
     VersionInfo::ThorTasks.install(:class => MyProject) # use the thing where you included VersionInfo
 
@@ -98,6 +99,8 @@ Or, if you prefer Thor:
     thor vinfo:show                # Show version tag and create version_info.yml...
 
 ### Install
+
+ VersionInfo is [https://rubygems.org/gems/version_info](https://rubygems.org/gems/version_info) at so:
 
     gem install version_info
 

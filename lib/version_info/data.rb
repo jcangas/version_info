@@ -14,7 +14,7 @@ module VersionInfo
     end
 
     def file_name
-      @file_name ||= Dir.pwd + '/' + underscore(self.class.name) +  '_info.yml'
+      @file_name ||= Dir.pwd + '/' + 'version_info.yml'
     end
 
     def file_name=(value)
@@ -28,7 +28,7 @@ module VersionInfo
       VersionInfo.segments[idx..-1].each do |sgm| 
 	      send("#{sgm}=", 0) if send(sgm)
       end
-      send("#{key}=", 1 + send(key))
+      send("#{key}=", 1 + send(key).to_i)
     end
     
     def load

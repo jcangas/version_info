@@ -3,26 +3,26 @@ require 'spec_helper'
 require 'version_info/test_file'
 
 describe "VersionInfo" do
+
   before :each do
     module TestFile
-      include VersionInfo # force new VERSION data
+      include VersionInfo # force new VERSION value
     end
   end
+
   after :each do
     module TestFile
       remove_const :VERSION
-      remove_const :Version
+      # remove_const :Version
     end
-  end
-    
-
+  end    
 
   it "is initalized" do
     TestFile::VERSION.marshal_dump.should == {:major => 0, :minor => 0, :patch => 0 }
   end
 
   it "has default filename" do
-    TestFile::VERSION.file_name.should ==  Dir.pwd + '/test_file/version_info.yml'
+    TestFile::VERSION.file_name.should ==  Dir.pwd + '/version_info.yml'
   end
 
   it "can assign filename" do
