@@ -13,8 +13,8 @@ module VersionInfo
     other.const_set('VERSION', data.new)
   end
 
-  autoload :RakeTasks, 'version_info/tasks'
-  autoload :ThorTasks, 'version_info/tasks'
+  autoload :RakeTasks, 'version_info/rake_tasks'
+  autoload :ThorTasks, 'version_info/thor_tasks'
 
 end
 
