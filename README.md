@@ -111,7 +111,7 @@ using the segment names, expecting their values are numbers:
 	    @tag_format ||= VersionInfo.segments.map { |k| "%<#{k}>d"}.join('.')
     end
 
-So tag_format return some like "%<major>d.%<minor>d%<patch>d".
+So tag_format return some like "%\<major\>d.%\<minor\>d%\<patch\>d".
 
 If your VersionInfo yaml file is like:
 
