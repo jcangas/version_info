@@ -2,13 +2,17 @@ require 'version_info/data'
 
 module VersionInfo
 
+  # current segments or defaults
   def self.segments
-    [:major, :minor, :patch]
+    @segments ||= [:major, :minor, :patch] 
+  end
+
+  # define segments
+  def self.segments=(values)
+    @segments = values
   end
    
   def self.included(other)
-    # data = Class.new(Data)
-    # other.const_set('Version', data)
     other.const_set('VERSION', Data.new)
   end
 

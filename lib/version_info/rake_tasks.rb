@@ -1,5 +1,6 @@
 module VersionInfo 
   class RakeTasks
+    include Rake::DSL
     
     def self.install(opts = {})
       #dir = caller.find{|c| /Rakefile:/}[/^(.*?)\/Rakefile:/, 1]

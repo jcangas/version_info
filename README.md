@@ -2,12 +2,22 @@
 
 ### Overview
 
-  VersionIinfo is a powerful and very lightweight gem to manage version data in your Ruby projects or other gems.
+  VersionInfo is a powerful and very lightweight gem to manage version data in your Ruby projects or gems. Very user friendly thanks to rake / thor tasks
 
-  VersionIinfo can manage a serie of predefined segments to build your version tag with the tipical structure X.X.X.X.
-  Their values are stored in a yaml file, and supports custom values. 
+####  Features
 
-  Also rake & thor tasks are avaiable to simplify yaml file creation and update.
+  * rake & thor tasks avaiables to yaml file creation, bump segments and show info
+
+  * can define custom segments to build your version tag with the tipical structure X.X.X.X.
+
+  * can use a custom tag format: do you want a tag like "1-3-1pre"?. No problem!.
+
+  * can include any custom info in your version data.
+
+  * Version data is stored in a yaml file.
+  
+  * good rspec tests
+
 
   Feel free to contact me about bugs/features
 
@@ -21,9 +31,11 @@ Include VersionInfo in your main project module (or class):
       include VersionInfo
     end
 
-From here, is better to use the builtin rake/thor tasks (see it forward). Here is how VersionInfo works and their user options:
+From here, is better to use rake/thor tasks (see it forward). 
 
-After you included VersionIinfo, a new constant MyProject::VERSION is created holding an object of class VersionInfo::Data
+Here is how VersionInfo works and their user options:
+
+After you included VersionInfo, a new constant MyProject::VERSION is created holding an object of class VersionInfo::Data
 
 VersionInfo use yaml file to store version data:
 
@@ -39,21 +51,27 @@ when using Rake or Thor.
 Anyway, you can change this (recomended):
     module MyProject
       include VersionInfo
-      VERISION.file_name = '/path/to/my_file.yaml'      
+      VERSION.file_name = '/path/to/my_file.yaml'      
     end
 
-Note you can put any custom data. In order to get the version tag, VersionInfo reserve some special keys for use as the "segments" of the version tag. Here the source code:
+Note you can put any custom data. In order to get the version tag, VersionInfo define the segments of the version tag. Here the source code:
 
     module VersionInfo
 
+      # current segments or defaults
       def self.segments
-        [:major, :minor, :patch, :state, :build]
+        @segments ||= [:major, :minor, :patch] 
+      end
+
+      # define segments
+      def self.segments=(values)
+        @segments = values
       end
 
       ...
     end
 
-Usingh the previous version_info.yml:
+Using the previous version_info.yml:
 
     puts MyProject::VERSION.tag
 
@@ -66,13 +84,54 @@ Also you can bump any segment. With the same sample:
 
     => 1.0.0
 
-Note the other (lower weight) segments are reset to 0 after bump.
+Note other "lower weight" segments are reset to 0.
+
+### Bonus: Custom segments and tag format.
+
+  You can override the default segments
+
+    VersionInfo.segments = [:a, :b, :c]
+    module MyProject
+      include VersionInfo # force new VERSION value
+    end
+
+  Note this must be done **before** include VersionInfo.
+
+ Also, tag format can be redefined. VersionInfo uses simple
+sprintf in order to build the tag string. Here is the code:
+
+    def tag
+      tag_format % to_hash
+    end
+
+By default, tag_format, returns a simple sprintf format string,
+using the segment names, expecting their values are numbers:
+
+    def tag_format
+	    @tag_format ||= VersionInfo.segments.map { |k| "%<#{k}>d"}.join('.')
+    end
+
+So tag_format return some like "%<major>d.%<minor>d%<patch>d".
+
+If your VersionInfo yaml file is like:
+
+    --- 
+    major: 2
+    minor: 1
+    patch: 53
+    buildflag: pre
+
+You can change the tag format
+
+    MyProject::VERSION.buildflag = 'pre'
+    MyProject::VERSION.tag_format = MyProject::VERSION.tag_format + "--%<buildflag>s"
+    puts MyProject::VERSION.tag # => '2.1.53--pre'    
 
 ### Rake / Thor tasks
 
 Put in your rake file:
 
-    VersionInfo::RakeTasks.install(:class => MyProject) # use the thing where you included VersionInfo
+    VersionInfo::RakeTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
 
 And you get a few tasks with a namespace vinfo:
 
@@ -87,7 +146,7 @@ And you get a few tasks with a namespace vinfo:
 
 If you prefer Thor:
 
-    VersionInfo::ThorTasks.install(:class => MyProject) # use the thing where you included VersionInfo
+    VersionInfo::ThorTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
 
     thor list
     =>
@@ -100,7 +159,7 @@ If you prefer Thor:
 
 ### Install
 
- VersionInfo is [https://rubygems.org/gems/version_info](https://rubygems.org/gems/version_info) at so:
+ VersionInfo is at [https://rubygems.org/gems/version_info](https://rubygems.org/gems/version_info) :
 
     gem install version_info
 

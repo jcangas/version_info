@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'version_info/test_file'
 
-describe "VersionInfo" do
+describe "VersionInfo defaults" do
 
   before :each do
     module TestFile
@@ -13,7 +13,6 @@ describe "VersionInfo" do
   after :each do
     module TestFile
       remove_const :VERSION
-      # remove_const :Version
     end
   end    
 
@@ -36,6 +35,15 @@ describe "VersionInfo" do
 
   it "has a tag property" do
     TestFile::VERSION.tag.should == '0.0.0'    
+  end
+
+  it "tag has format" do
+    TestFile::VERSION.tag.should == '0.0.0'    
+  end
+  it "tag format can be changed" do
+    TestFile::VERSION.build_flag = 'pre'
+    TestFile::VERSION.tag_format = TestFile::VERSION.tag_format + "--%<build_flag>s"
+    TestFile::VERSION.tag.should == '0.0.0--pre'    
   end
 
   it "can bump a segment" do
@@ -80,4 +88,33 @@ describe "VersionInfo" do
     TestFile::VERSION.marshal_dump.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end
 
+end
+
+describe "VersionInfo custom segments" do
+  before :each do
+    VersionInfo.segments = [:a, :b, :c]
+    module TestFile
+      include VersionInfo # force new VERSION value
+    end
+  end
+
+  after :each do
+    module TestFile
+      remove_const :VERSION
+    end
+  end    
+
+  it "can be assigned" do
+    TestFile::VERSION.marshal_dump.should == {:a => 0, :b => 0, :c => 0 }
+   end
+
+  it "segments are properties" do
+    TestFile::VERSION.a.should == 0
+   end
+
+  it "can bump a custom segment" do
+    TestFile::VERSION.bump(:c)
+    TestFile::VERSION.bump(:b)
+    TestFile::VERSION.tag.should == '0.1.0'    
+  end
 end

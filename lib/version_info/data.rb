@@ -9,7 +9,7 @@ module VersionInfo
       if File.exist?(file_name)
         load
       else
-        marshal_load(get_defaults)
+        reset
       end
     end
 
@@ -19,7 +19,11 @@ module VersionInfo
 
     def file_name=(value)
       @file_name = value
-      load  if File.exist?(@file_name)
+      load if File.exist?(@file_name)
+    end
+
+    def reset
+      marshal_load(get_defaults)
     end
 
     def bump(key)
@@ -44,9 +48,21 @@ module VersionInfo
     def to_s
       tag
     end
+    
+    def to_hash
+      marshal_dump
+    end
 
     def tag
-	    VersionInfo.segments.map { |k| send(k) }.compact.join('.')
+      tag_format % to_hash
+    end
+    
+    def tag_format
+	    @tag_format ||= VersionInfo.segments.map { |k| "%<#{k}>d"}.join('.')
+    end
+
+    def tag_format=(value)
+	    @tag_format = value
     end
 
   protected
@@ -56,7 +72,8 @@ module VersionInfo
    
     def load_from(io)
       values = YAML.load(io)
-	    values.keys.each{|k, v| values[k.to_sym] = values.delete(k)}
+      # force keys as symbols
+	    values.keys.each{|k| values[k.to_sym] = values.delete(k)}
       marshal_load(values)
       self
     end
@@ -65,16 +82,6 @@ module VersionInfo
 	    values = self.marshal_dump.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
       YAML.dump(values, io)
 	    self      
-    end
-
-    def underscore(camel_cased_word)
-      word = camel_cased_word.to_s.dup
-      word.gsub!(/::/, '/')
-      word.gsub!(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
-      word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
-      word.tr!("-", "_")
-      word.downcase!
-      word
     end
   end
 end
