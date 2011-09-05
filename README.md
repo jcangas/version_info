@@ -23,7 +23,7 @@
 
 ### Travis CI status
 
-[![Build Status](http://secure.travis-ci.org/jcangas/version_info.png)](http://travis-ci.org/jcangas/version_info)
+[![Build Status](https://secure.travis-ci.org/jcangas/version_info.png)](http://travis-ci.org/jcangas/version_info)
 
 ### Usage
 
