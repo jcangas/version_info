@@ -62,7 +62,7 @@ describe "VersionInfo defaults" do
     File.stub!(:open).and_yield(io)
     TestFile::VERSION.bump(:minor)
     TestFile::VERSION.save
-    if RUBY_PATCHLEVEL < 35 # asume ruby 1.9.2
+    if RUBY_PATCHLEVEL >= 290 # asume ruby 1.9.2
       io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\n"
     else
       io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\n"
@@ -75,7 +75,7 @@ describe "VersionInfo defaults" do
     TestFile::VERSION.bump(:minor)
     TestFile::VERSION.author = 'jcangas'
     TestFile::VERSION.save
-    if RUBY_PATCHLEVEL < 35 # asume ruby 1.9.2
+    if RUBY_PATCHLEVEL >= 290 # asume ruby 1.9.2
       io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
     else
       io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
