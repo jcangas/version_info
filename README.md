@@ -21,6 +21,10 @@
 
   Feel free to contact me about bugs/features
 
+### Travis CI status
+
+[![Build Status](https://secure.travis-ci.org/[jcangas]/[version_info].png)](http://travis-ci.org/[jcangas]/[version_info])
+
 ### Usage
 
 Include VersionInfo in your main project module (or class):
