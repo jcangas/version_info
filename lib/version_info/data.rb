@@ -23,7 +23,11 @@ module VersionInfo
     end
 
     def reset
-      marshal_load(get_defaults)
+      assign(get_defaults)
+    end
+    
+    def assign(hash)
+      marshal_load(hash)    
     end
 
     def bump(key)
@@ -74,12 +78,12 @@ module VersionInfo
       values = YAML.load(io)
       # force keys as symbols
 	    values.keys.each{|k| values[k.to_sym] = values.delete(k)}
-      marshal_load(values)
+      assign(values)
       self
     end
 
     def save_to(io)
-	    values = self.marshal_dump.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
+	    values = self.to_hash.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
       YAML.dump(values, io)
 	    self      
     end

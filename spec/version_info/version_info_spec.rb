@@ -17,7 +17,7 @@ describe "VersionInfo defaults" do
   end    
 
   it "is initalized" do
-    TestFile::VERSION.marshal_dump.should == {:major => 0, :minor => 0, :patch => 0 }
+    TestFile::VERSION.to_hash.should == {:major => 0, :minor => 0, :patch => 0 }
   end
 
   it "has default filename" do
@@ -86,14 +86,14 @@ describe "VersionInfo defaults" do
     io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\n")
     File.should_receive(:read).and_return{io}
     TestFile::VERSION.load
-    TestFile::VERSION.marshal_dump.should == {:major => 1, :minor => 2, :patch => 3 }  
+    TestFile::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
   end
 
   it "can load custom data " do
     io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\nauthor: jcangas\n")
     File.should_receive(:read).and_return{io}
     TestFile::VERSION.load
-    TestFile::VERSION.marshal_dump.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
+    TestFile::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end
 
 end
@@ -113,7 +113,7 @@ describe "VersionInfo custom segments" do
   end    
 
   it "can be assigned" do
-    TestFile::VERSION.marshal_dump.should == {:a => 0, :b => 0, :c => 0 }
+    TestFile::VERSION.to_hash.should == {:a => 0, :b => 0, :c => 0 }
    end
 
   it "segments are properties" do
