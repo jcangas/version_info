@@ -62,7 +62,9 @@ describe "VersionInfo defaults" do
     File.stub!(:open).and_yield(io)
     TestFile::VERSION.bump(:minor)
     TestFile::VERSION.save
-    if RUBY_PATCHLEVEL >= 290 # asume ruby 1.9.2
+    # Seems like YAML has removed one space in ruby 1.9.2p290
+    # TODO: check for ruby 1.9.2
+    if RUBY_PATCHLEVEL >= 290 
       io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\n"
     else
       io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\n"

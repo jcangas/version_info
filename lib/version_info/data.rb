@@ -14,7 +14,7 @@ module VersionInfo
     end
 
     def file_name
-      @file_name ||= Dir.pwd + '/' + 'version_info.yml'
+      @file_name ||= Dir.pwd + '/' + default_file_name
     end
 
     def file_name=(value)
@@ -74,6 +74,10 @@ module VersionInfo
       VersionInfo.segments[0..2].inject({}){|h, k| h[k] = 0; h}
     end
    
+    def default_file_name
+      'version_info.yml'
+    end
+
     def load_from(io)
       values = YAML.load(io)
       # force keys as symbols
@@ -89,3 +93,17 @@ module VersionInfo
     end
   end
 end
+
+__END__
+
+#TODO: Support other file formats. We can use storage adapters  :module_file, :text_file
+
+# file name: VERSION
+  1.2.3
+
+# file name: version.rb
+   module MyProject
+      VERSION = '1.2.3'
+   end
+
+
