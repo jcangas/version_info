@@ -91,7 +91,7 @@ Version.file_format= :text
    end
 ```
 
-	The file is named by default VERSION and looks like
+The file is named by default VERSION and looks like
 
 ```
 2.2.3
@@ -109,7 +109,7 @@ Version.file_format= :yaml
    end
 ```
 
-	The file is named by default version_info.yml and looks like
+The file is named by default version_info.yml and looks like
 
 ```
 --- 
