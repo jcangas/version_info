@@ -2,7 +2,7 @@ module VersionInfo
   module ThorTasks
     def self.install(opts = {})
       Class.new(::Thor) do
-        @target = opts[:class]
+        @target = opts[:target]
         class << self
             attr_reader :target
         end

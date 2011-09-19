@@ -1,8 +1,62 @@
 ## VersionInfo
 
-### Overview
+### Travis CI status
 
-  VersionInfo is a powerful and very lightweight gem to manage version data in your Ruby projects or gems. Very user friendly thanks to rake / thor tasks
+[![Build Status](https://secure.travis-ci.org/jcangas/version_info.png)](http://travis-ci.org/jcangas/version_info)
+
+### Install
+
+ VersionInfo is at [https://rubygems.org/gems/version_info](https://rubygems.org/gems/version_info), so:
+
+    gem install version_info
+
+### Usage
+
+VersionInfo is a powerful and lightweight gem to manage version data in your Ruby projects or gems.
+And is very user friendly thanks to rake / thor tasks: 
+
+First, include VersionInfo in your main project module (or class):
+
+    require 'version_info'
+
+    module MyProject
+      VERSION = "1.5.0"
+
+      include VersionInfo
+      VERSION.file_name = __FILE__ 
+    end
+
+Then use rake/thor tasks:
+
+    rake vinfo:minor
+ 
+=> version changed to 1.6.0
+
+Please, note here VersionInfo is included *after* the constant VERSION, if you don't like this also works
+
+    module MyProject
+      include VersionInfo
+      self.VERSION = "1.5.0"
+      VERSION.file_name = __FILE__ 
+    end
+
+Please note here you are invoking a singleton method and not using a constant. When included VersionInfo
+does a bit of magic and then you can use *both* the method and the constant:
+
+    MyProject.VERSION  # it works
+    MyProject::VERSION # also works
+
+One more sample:
+
+    Gem::Specification.new do |s|
+      s.name        = "version_info"
+      s.version     = VersionInfo::VERSION
+      s.platform    = Gem::Platform::RUBY
+
+After VersionInfo is included, the singleton method and the constant returns a object of class VersionInfo::Data.
+You can use some methods from it, (#bump, #to_s, #tag, etc.). Also you get another singleton method to easy assignment:
+
+    MyProject.VERSION= "2.0.2"  # also works
 
 ####  Features
 
@@ -14,81 +68,82 @@
 
   * can include any custom info in your version data.
 
-  * Version data is stored in a yaml file.
-  
   * good rspec tests
 
+  * Flexible formats for stored your version data:
 
-  Feel free to contact me about bugs/features
-
-### Travis CI status
-
-[![Build Status](https://secure.travis-ci.org/jcangas/version_info.png)](http://travis-ci.org/jcangas/version_info)
-
-### Usage
-
-Include VersionInfo in your main project module (or class):
-
-    require 'version_info'
+    * In a ruby source (default)
 
     module MyProject
       include VersionInfo
+      self.VERSION = "1.5.0"
+      VERSION.file_name = __FILE__ # required for this format
+    end
+  
+    * In a text file
+
+    Version.file_format= :text    
+    module MyProject
+      include VersionInfo
+      VERSION.file_name = /some_path/your_version_file #convenient but optional for this format
     end
 
-From here, is better to use rake/thor tasks (see it forward). 
+The file is named by default VERSION and looks like
 
-Here is how VersionInfo works and their user options:
-
-After you included VersionInfo, a new constant MyProject::VERSION is created holding an object of class VersionInfo::Data
-
-VersionInfo use yaml file to store version data:
-
-    --- 
-    major: 0
-    minor: 1
-    patch: 0
+    2.2.3
     author: jcangas
+    email: jorge.cangas@gmail.com
 
-By default the file is named version_info.yml and stored in the current dir, useful
-when using Rake or Thor.
+  
+    * In a yaml file, as a hash
 
-Anyway, you can change this (recomended):
+    Version.file_format= :yaml    
     module MyProject
       include VersionInfo
-      VERSION.file_name = '/path/to/my_file.yaml'      
+      VERSION.file_name = /some_path/your_file.yaml #convenient but optional for this format
     end
 
-Note you can put any custom data. In order to get the version tag, VersionInfo define the segments of the version tag. Here the source code:
+The file is named by default version_info.yml and looks like
 
-    module VersionInfo
+      --- 
+      major: 1
+      minor: 1
+      patch: 4
+      author: jcangas
 
-      # current segments or defaults
-      def self.segments
-        @segments ||= [:major, :minor, :patch] 
-      end
 
-      # define segments
-      def self.segments=(values)
-        @segments = values
-      end
+Pleae, feel free to contact me about bugs/features
 
-      ...
-    end
+### Rake / Thor tasks
 
-Using the previous version_info.yml:
+Put in your rake file:
 
-    puts MyProject::VERSION.tag
+    VersionInfo::RakeTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
 
-    => 0.1.0
+And you get a few tasks with a namespace vinfo:
 
-Also you can bump any segment. With the same sample:
+    rake -T
+    =>
+    rake vinfo:file  # Show version file format & name
+    rake vinfo:inspect  # Show complete version info
+    rake vinfo:major  # Bumps version segment MAJOR
+    rake vinfo:minor  # Bumps version segment MINOR
+    rake vinfo:patch  # Bumps version segment PATCH
+    rake vinfo:show   # Show current version tag and create version_info.yml if missing
 
-    MyProject::VERSION.bump(:major)
-    puts MyProject::VERSION
+If you prefer Thor:
 
-    => 1.0.0
+    VersionInfo::ThorTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
 
-Note other "lower weight" segments are reset to 0.
+    thor list
+    =>
+
+    vinfo
+    -----
+    rake vinfo:file  # Show version file format & name
+    thor vinfo:bump SEGMENT=patch  # bumps segment: [major, minor, patch, build]...
+    thor vinfo:inspect             # Show complete version info
+    thor vinfo:show                # Show version tag and create version_info.yml...
 
 ### Bonus: Custom segments and tag format.
 
@@ -96,7 +151,7 @@ Note other "lower weight" segments are reset to 0.
 
     VersionInfo.segments = [:a, :b, :c]
     module MyProject
-      include VersionInfo # force new VERSION value
+      include VersionInfo
     end
 
   Note this must be done **before** include VersionInfo.
@@ -131,39 +186,4 @@ You can change the tag format
     MyProject::VERSION.tag_format = MyProject::VERSION.tag_format + "--%<buildflag>s"
     puts MyProject::VERSION.tag # => '2.1.53--pre'    
 
-### Rake / Thor tasks
-
-Put in your rake file:
-
-    VersionInfo::RakeTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
-
-And you get a few tasks with a namespace vinfo:
-
-    rake -T
-    =>
-    rake vinfo:build  # Bumps version segment BUILD
-    rake vinfo:inspect  # Show complete version info
-    rake vinfo:major  # Bumps version segment MAJOR
-    rake vinfo:minor  # Bumps version segment MINOR
-    rake vinfo:patch  # Bumps version segment PATCH
-    rake vinfo:show   # Show current version tag and create version_info.yml if missing
-
-If you prefer Thor:
-
-    VersionInfo::ThorTasks.install(:class => MyProject) # pass here the thing where you included VersionInfo
-
-    thor list
-    =>
-
-    vinfo
-    -----
-    thor vinfo:bump SEGMENT=patch  # bumps segment: [major, minor, patch, build]...
-    thor vinfo:inspect             # Show complete version info
-    thor vinfo:show                # Show version tag and create version_info.yml...
-
-### Install
-
- VersionInfo is at [https://rubygems.org/gems/version_info](https://rubygems.org/gems/version_info) :
-
-    gem install version_info
 

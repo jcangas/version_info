@@ -1,6 +1,7 @@
+
 module VersionInfo
+  VERSION = "1.7.0"
   versionable(self)
-  self.VERSION = "1.5.0"
-  self.VERSION.file_name = __FILE__ 
+  VERSION.file_name = __FILE__ 
 end
 

@@ -12,7 +12,7 @@ module VersionInfo
 
     def initialize(root_path, opts)
       @root_path = root_path
-      @target = opts[:class]
+      @target = opts[:target]
     end
 
     def install

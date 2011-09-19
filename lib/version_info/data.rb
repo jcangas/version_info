@@ -18,6 +18,7 @@ module VersionInfo
           extend(ModuleStorage)          
       end
       reset
+      file_name = nil
     end
 
     def file_name
@@ -26,7 +27,7 @@ module VersionInfo
 
     def file_name=(value)
       @file_name = value
-      load if @file_name && File.exist?(@file_name)
+      load if self.file_name && File.exist?(self.file_name)
     end
 
     def reset
