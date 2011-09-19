@@ -60,56 +60,54 @@ You can use some methods from it, (#bump, #to_s, #tag, etc.). Also you get anoth
 
 ####  Features
 
-  * rake & thor tasks avaiables to yaml file creation, bump segments and show info
+* rake & thor tasks avaiables to yaml file creation, bump segments and show info
 
-  * can define custom segments to build your version tag with the tipical structure X.X.X.X.
+* can define custom segments to build your version tag with the tipical structure X.X.X.X.
 
-  * can use a custom tag format: do you want a tag like "1-3-1pre"?. No problem!.
+* can use a custom tag format: do you want a tag like "1-3-1pre"?. No problem!.
 
-  * can include any custom info in your version data.
+* can include any custom info in your version data.
 
-  * good rspec tests
+* good rspec tests
 
-  * Flexible formats for stored your version data:
+* Flexible formats for stored your version data:
+  * In a ruby source (default)
 
-    * In a ruby source (default)
-
-    module MyProject
-      include VersionInfo
-      self.VERSION = "1.5.0"
-      VERSION.file_name = __FILE__ # required for this format
-    end
+        module MyProject
+          include VersionInfo
+          self.VERSION = "1.5.0"
+          VERSION.file_name = __FILE__ # required for this format
+        end
   
-    * In a text file
+  * In a text file
 
-    Version.file_format= :text    
-    module MyProject
-      include VersionInfo
-      VERSION.file_name = /some_path/your_version_file #convenient but optional for this format
-    end
+        Version.file_format= :text    
+        module MyProject
+         include VersionInfo
+         VERSION.file_name = /some_path/your_version_file #convenient but optional for this format
+        end
 
-The file is named by default VERSION and looks like
+	The file is named by default VERSION and looks like
 
-    2.2.3
-    author: jcangas
-    email: jorge.cangas@gmail.com
-
+        2.2.3
+        author: jcangas
+        email: jorge.cangas@gmail.com
   
-    * In a yaml file, as a hash
+  * In a yaml file, as a hash
 
-    Version.file_format= :yaml    
-    module MyProject
-      include VersionInfo
-      VERSION.file_name = /some_path/your_file.yaml #convenient but optional for this format
-    end
+        Version.file_format= :yaml    
+        module MyProject
+          include VersionInfo
+          VERSION.file_name = /some_path/your_file.yaml #convenient but optional for this format
+        end
 
-The file is named by default version_info.yml and looks like
+	The file is named by default version_info.yml and looks like
 
-      --- 
-      major: 1
-      minor: 1
-      patch: 4
-      author: jcangas
+      	--- 
+      	major: 1
+      	minor: 1
+      	patch: 4
+      	author: jcangas
 
 
 Pleae, feel free to contact me about bugs/features
