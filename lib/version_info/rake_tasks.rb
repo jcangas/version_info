@@ -18,9 +18,9 @@ module VersionInfo
     def install
       namespace :vinfo do
 
-        desc "Show version file name"
+        desc "Show version file format & name"
         task :file do
-          puts "(#{VersionInfo.file_format.to_s})#{target::VERSION.file_name}"
+          puts "#{VersionInfo.file_format.to_s} format: #{target::VERSION.file_name}"
         end
 
         desc "Show complete version info"

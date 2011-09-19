@@ -8,6 +8,11 @@ module VersionInfo
         end
         namespace :vinfo
 
+        desc 'file, '"Show version file format & name"
+        def file
+          puts "#{VersionInfo.file_format.to_s} format: #{target::VERSION.file_name}"
+        end
+
         desc 'show', "Show tag. Create version file if none"
         def show
           puts target::VERSION.tag
