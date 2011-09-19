@@ -3,7 +3,6 @@ module VersionInfo
     include Rake::DSL
     
     def self.install(opts = {})
-      #dir = caller.find{|c| /Rakefile:/}[/^(.*?)\/Rakefile:/, 1]
       dir = File.dirname(Rake.application.rakefile_location)
       self.new(dir, opts).install
     end
@@ -19,12 +18,17 @@ module VersionInfo
     def install
       namespace :vinfo do
 
+        desc "Show version file name"
+        task :file do
+          puts "(#{VersionInfo.file_format.to_s})#{target::VERSION.file_name}"
+        end
+
         desc "Show complete version info"
         task :inspect do
           puts target::VERSION.inspect
         end
 
-        desc "Show current version tag and create version_info.yml if missing"
+        desc "Show tag. Create version file if none"
         task :show do
           puts target::VERSION.tag
           target::VERSION.save unless File.exist?(target::VERSION.file_name)

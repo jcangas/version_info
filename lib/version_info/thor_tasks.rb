@@ -8,7 +8,7 @@ module VersionInfo
         end
         namespace :vinfo
 
-        desc 'show', "Show version tag and create version_info.yml if missing"
+        desc 'show', "Show tag. Create version file if none"
         def show
           puts target::VERSION.tag
           target::VERSION.save unless File.exist?(target::VERSION.file_name)

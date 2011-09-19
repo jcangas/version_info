@@ -1,16 +1,23 @@
 require 'ostruct'
-require 'yaml'
 
 module VersionInfo
+
   class Data < OpenStruct
 
     def initialize
       super
-      if File.exist?(file_name)
-        load
-      else
-        reset
+      case VersionInfo.file_format.to_s
+        when 'text'
+          require 'version_info/text_storage'
+          extend(TextStorage)
+        when 'yaml' 
+          require 'version_info/yaml_storage'
+          extend(YamlStorage)
+        else # asume 'module'
+          require 'version_info/module_storage'
+          extend(ModuleStorage)          
       end
+      reset
     end
 
     def file_name
@@ -19,7 +26,7 @@ module VersionInfo
 
     def file_name=(value)
       @file_name = value
-      load if File.exist?(@file_name)
+      load if @file_name && File.exist?(@file_name)
     end
 
     def reset
@@ -69,41 +76,14 @@ module VersionInfo
 	    @tag_format = value
     end
 
-  protected
+    def set_version_info(tag_str)
+      values = tag_str.split('.')
+      VersionInfo.segments.each{|sgm|	self.send("#{sgm}=", values.shift.match(/(\d+)/).to_s.to_i) }
+    end
+
     def get_defaults
       VersionInfo.segments[0..2].inject({}){|h, k| h[k] = 0; h}
-    end
-   
-    def default_file_name
-      'version_info.yml'
-    end
-
-    def load_from(io)
-      values = YAML.load(io)
-      # force keys as symbols
-	    values.keys.each{|k| values[k.to_sym] = values.delete(k)}
-      assign(values)
-      self
-    end
-
-    def save_to(io)
-	    values = self.to_hash.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
-      YAML.dump(values, io)
-	    self      
-    end
+    end   
   end
 end
-
-__END__
-
-#TODO: Support other file formats. We can use storage adapters  :module_file, :text_file
-
-# file name: VERSION
-  1.2.3
-
-# file name: version.rb
-   module MyProject
-      VERSION = '1.2.3'
-   end
-
 

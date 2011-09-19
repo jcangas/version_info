@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require 'version_info/test_file'
+#require 'version_info/test_file'
 
 describe "VersionInfo defaults" do
 
@@ -8,6 +8,7 @@ describe "VersionInfo defaults" do
     module TestFile
       include VersionInfo # force new VERSION value
     end
+    TestFile::VERSION.file_name = nil
   end
 
   after :each do
@@ -20,26 +21,23 @@ describe "VersionInfo defaults" do
     TestFile::VERSION.to_hash.should == {:major => 0, :minor => 0, :patch => 0 }
   end
 
-  it "has default filename" do
-    TestFile::VERSION.file_name.should ==  Dir.pwd + '/version_info.yml'
-  end
-
   it "can assign filename" do
     TestFile::VERSION.file_name = 'test_file.vinfo'
     TestFile::VERSION.file_name.should == 'test_file.vinfo'
   end
 
   it "has a minor property" do
-    TestFile::VERSION.minor.should == 0
+    lambda {TestFile::VERSION.minor}.should_not raise_error
   end
 
   it "has a tag property" do
-    TestFile::VERSION.tag.should == '0.0.0'    
+    lambda {TestFile::VERSION.tag}.should_not raise_error
   end
 
   it "tag has format" do
     TestFile::VERSION.tag.should == '0.0.0'    
   end
+
   it "tag format can be changed" do
     TestFile::VERSION.build_flag = 'pre'
     TestFile::VERSION.tag_format = TestFile::VERSION.tag_format + "--%<build_flag>s"
@@ -57,47 +55,6 @@ describe "VersionInfo defaults" do
     TestFile::VERSION.tag.should == '0.1.0'   
   end
 
-  it "can save " do
-    io = StringIO.new
-    File.stub!(:open).and_yield(io)
-    TestFile::VERSION.bump(:minor)
-    TestFile::VERSION.save
-    # Seems like YAML has removed one space in ruby 1.9.2p290
-    # TODO: check for ruby 1.9.2
-    if RUBY_PATCHLEVEL >= 290 
-      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\n"
-    else
-      io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\n"
-    end
-  end
-
-  it "can save custom data " do
-    io = StringIO.new
-    File.stub!(:open).and_yield(io)
-    TestFile::VERSION.bump(:minor)
-    TestFile::VERSION.author = 'jcangas'
-    TestFile::VERSION.save
-    if RUBY_PATCHLEVEL >= 290 # asume ruby 1.9.2
-      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
-    else
-      io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
-    end
-  end
-
-  it "can load " do
-    io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\n")
-    File.should_receive(:read).and_return{io}
-    TestFile::VERSION.load
-    TestFile::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
-  end
-
-  it "can load custom data " do
-    io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\nauthor: jcangas\n")
-    File.should_receive(:read).and_return{io}
-    TestFile::VERSION.load
-    TestFile::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
-  end
-
 end
 
 describe "VersionInfo custom segments" do
@@ -112,6 +69,7 @@ describe "VersionInfo custom segments" do
     module TestFile
       remove_const :VERSION
     end
+    VersionInfo.segments = nil # reset defaults
   end    
 
   it "can be assigned" do
@@ -119,7 +77,7 @@ describe "VersionInfo custom segments" do
    end
 
   it "segments are properties" do
-    TestFile::VERSION.a.should == 0
+    lambda{TestFile::VERSION.a}.should_not raise_error
    end
 
   it "can bump a custom segment" do
@@ -128,3 +86,5 @@ describe "VersionInfo custom segments" do
     TestFile::VERSION.tag.should == '0.1.0'    
   end
 end
+
+
