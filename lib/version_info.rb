@@ -17,10 +17,10 @@ module VersionInfo
   end
   
   def self.install_tasks(options)
-    if defined?(:Rake)
+    if defined?(Rake)
       require 'version_info/rake_tasks' 
       RakeTasks.install(options) 
-    elsif defined?(:Thor)
+    elsif defined?(Thor)
       require 'version_info/thor_tasks'
       ThorTasks.install(options)
     end

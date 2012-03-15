@@ -56,8 +56,8 @@ One more sample:
 
 ```ruby
     Gem::Specification.new do |s|
-      s.name        = "version_info"
-      s.version     = VersionInfo::VERSION
+      s.name        = "my_gem"
+      s.version     = MyGem::VERSION
       s.platform    = Gem::Platform::RUBY
 ```
 
@@ -82,7 +82,47 @@ You can use some methods from it, (#bump, #to_s, #tag, etc.). Also you get anoth
 
 * Flexible formats for stored your version data:
   
-1. In a ruby source (default)
+1. Using a text file. Content of your version.rb file:
+
+```ruby
+   VersionInfo.file_format= :text    
+   module MyProject
+     include VersionInfo
+     VERSION.file_name = /some_path/your_version_file #convenient but optional for this format
+   end
+```
+
+The file is created "on demand". For example, you can invoke the task vinfo:show
+The version data file is named by default VERSION and looks like. 
+
+```
+2.2.3
+   author: jcangas
+   email: jorge.cangas@gmail.com
+```
+  
+2. Using a yaml file, as a hash. Content of your version.rb file:
+
+```ruby
+   VersionInfo.file_format= :yaml    
+   module MyProject
+     include VersionInfo
+     VERSION.file_name = /some_path/your_file.yaml #convenient but optional for this format
+   end
+```
+
+The file is created "on demand". For example, you can invoke the task vinfo:show
+The version data file is named by default VERSION and looks like. 
+
+```yaml
+--- 
+ 	major: 1
+ 	minor: 1
+ 	patch: 4
+ 	author: jcangas
+```
+
+3. Using a ruby source (default). Content of your version.rb file:
 
 ```ruby
    module MyProject
@@ -92,43 +132,7 @@ You can use some methods from it, (#bump, #to_s, #tag, etc.). Also you get anoth
    end
 ```
   
-2. In a text file
-
-```ruby
-   Version.file_format= :text    
-     module MyProject
-     include VersionInfo
-     VERSION.file_name = /some_path/your_version_file #convenient but optional for this format
-   end
-```
-
-The file is named by default VERSION and looks like
-
-```
-2.2.3
-   author: jcangas
-   email: jorge.cangas@gmail.com
-```
-  
-3. In a yaml file, as a hash
-
-```ruby
-   Version.file_format= :yaml    
-   module MyProject
-     include VersionInfo
-     VERSION.file_name = /some_path/your_file.yaml #convenient but optional for this format
-   end
-```
-
-The file is named by default version_info.yml and looks like
-
-```yaml
---- 
- 	major: 1
- 	minor: 1
- 	patch: 4
- 	author: jcangas
-```
+You write this file. and no version data file is needed: VERSION const is already here (you see it, isn't?) 
 
 
 Pleae, feel free to contact me about bugs/features
@@ -162,6 +166,8 @@ And you get a few tasks with a namespace vinfo:
     thor vinfo:bump SEGMENT=patch  # bumps segment: [major, minor, patch, build]...
     thor vinfo:inspect             # Show complete version info
     thor vinfo:show                # Show version tag and create version_info.yml...
+
+Note all tasks works with any version format file!!. So is very easy to migrate for one to the other.
 
 ### Bonus: Custom segments and tag format.
 
