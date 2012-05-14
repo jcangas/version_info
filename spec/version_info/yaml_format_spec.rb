@@ -23,10 +23,10 @@ describe "Yaml file format" do
     @test_module::VERSION.save
     # Seems like YAML has removed one space in ruby 1.9.2p290
     # TODO: check for ruby 1.9.2
-    if RUBY_PATCHLEVEL >= 290 
-      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\n"
-    else
+    if RUBY_VERSION == "1.9.2" && RUBY_PATCHLEVEL < 290 
       io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\n"
+    else
+      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\n"
     end
   end
 
@@ -36,10 +36,10 @@ describe "Yaml file format" do
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.author = 'jcangas'
     @test_module::VERSION.save
-    if RUBY_PATCHLEVEL >= 290 # asume ruby 1.9.2
-      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
-    else
+    if RUBY_VERSION == "1.9.2" && RUBY_PATCHLEVEL < 290 
       io.string.should == "--- \nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
+    else
+      io.string.should == "---\nmajor: 0\nminor: 1\npatch: 0\nauthor: jcangas\n" 
     end
   end
 
