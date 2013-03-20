@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    version_info (1.7.3)
+    version_info (1.7.4)
 
 GEM
   remote: http://rubygems.org/

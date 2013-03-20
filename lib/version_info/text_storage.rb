@@ -14,7 +14,8 @@ module VersionInfo
     end
 
     def load_from(io)
-      content = io.string.split("\n") unless io.is_a? Array
+      #content = io.string.split("\n") unless io.is_a? Array
+      content = io.readlines unless io.is_a? Array
       str = content.shift
       custom = content.inject({}) {|result, line| k, v = line.chomp.split(':'); result[k.strip.to_sym] = v.strip; result}
       self.set_version_info(str)

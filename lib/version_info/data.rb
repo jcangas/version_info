@@ -18,7 +18,7 @@ module VersionInfo
           extend(ModuleStorage)          
       end
       reset
-      file_name = nil
+      self.file_name = nil
     end
 
     def file_name
@@ -49,7 +49,7 @@ module VersionInfo
     
     def load
       load_from(File.read(file_name))
-	    self
+	  self
     end
 
     def save      
@@ -78,7 +78,7 @@ module VersionInfo
     end
 
     def set_version_info(tag_str)
-      values = tag_str.split('.')
+      values = tag_str.to_s.split('.')
       VersionInfo.segments.each{|sgm|	self.send("#{sgm}=", values.shift.match(/(\d+)/).to_s.to_i) }
     end
 
