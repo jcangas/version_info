@@ -8,7 +8,6 @@ describe "Text file format" do
     @test_module::VERSION.file_name = nil
   end
 
-
   it "has default filename" do
     @test_module::VERSION.file_name.should ==  Dir.pwd + '/' + 'VERSION'
   end
@@ -19,7 +18,7 @@ describe "Text file format" do
 
   it "can save " do
     io = StringIO.new
-    File.stub!(:open).and_yield(io)
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.save
     io.string.should == "0.1.0\n"
@@ -27,7 +26,7 @@ describe "Text file format" do
 
   it "can save custom data " do
     io = StringIO.new
-    File.stub!(:open).and_yield(io)
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.author = 'jcangas'
     @test_module::VERSION.email = 'jorge.cangas@gmail.com'
@@ -42,14 +41,14 @@ END
 
   it "can load " do
     io = StringIO.new("1.2.3")
-    File.should_receive(:read).and_return{io}
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
   end
 
   it "can load custom data " do
     io = StringIO.new("1.2.3\nauthor: jcangas\n")
-    File.should_receive(:read).and_return{io}
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end

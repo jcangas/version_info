@@ -48,13 +48,13 @@ module VersionInfo
     end
     
     def load
-      load_from(File.read(file_name))
+      File.open(file_name, 'r') {|io| load_from(io)}
 	  self
     end
 
     def save      
-	    File.open(file_name, 'w' ) {|out| save_to(out)}
-	    self
+	  File.open(file_name, 'w' ) {|out| save_to(out)}
+	  self
     end
 
     def to_s

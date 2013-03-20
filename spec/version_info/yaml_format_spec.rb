@@ -18,7 +18,7 @@ describe "Yaml file format" do
 
   it "can save " do
     io = StringIO.new
-    File.stub!(:open).and_yield(io)
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.save
     # Seems like YAML has removed one space in ruby 1.9.2p290
@@ -32,7 +32,7 @@ describe "Yaml file format" do
 
   it "can save custom data " do
     io = StringIO.new
-    File.stub!(:open).and_yield(io)
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.author = 'jcangas'
     @test_module::VERSION.save
@@ -45,14 +45,14 @@ describe "Yaml file format" do
 
   it "can load " do
     io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\n")
-    File.should_receive(:read).and_return{io}
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
   end
 
   it "can load custom data " do
     io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\nauthor: jcangas\n")
-    File.should_receive(:read).and_return{io}
+    File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end
