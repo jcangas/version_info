@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"  
   s.add_development_dependency "test_notifier"  
   s.add_development_dependency "notifier"  
+#  s.add_development_dependency "ruby-snarl"  
 end
