@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "version_info"
 require "version_info/version"
@@ -25,5 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"  
   s.add_development_dependency "test_notifier"  
   s.add_development_dependency "notifier"  
-#  s.add_development_dependency "ruby-snarl"  
+  s.add_development_dependency "coveralls"  
 end

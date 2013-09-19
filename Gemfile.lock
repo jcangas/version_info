@@ -1,35 +1,51 @@
 PATH
   remote: .
   specs:
-    version_info (1.7.6)
+    version_info (1.7.7)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    diff-lcs (1.2.1)
+    coveralls (0.7.0)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
+    diff-lcs (1.2.4)
+    mime-types (1.19)
+    multi_json (1.7.2)
     notifier (0.4.1)
-    rake (10.0.3)
-    rspec (2.13.0)
-      rspec-core (~> 2.13.0)
-      rspec-expectations (~> 2.13.0)
-      rspec-mocks (~> 2.13.0)
-    rspec-core (2.13.1)
-    rspec-expectations (2.13.0)
+    rake (10.1.0)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    rspec (2.14.1)
+      rspec-core (~> 2.14.0)
+      rspec-expectations (~> 2.14.0)
+      rspec-mocks (~> 2.14.0)
+    rspec-core (2.14.5)
+    rspec-expectations (2.14.2)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.13.0)
-    ruby-snarl (0.0.8)
+    rspec-mocks (2.14.3)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
+    term-ansicolor (1.2.2)
+      tins (~> 0.8)
     test_notifier (1.0.1)
       notifier
+    thor (0.16.0)
+    tins (0.10.0)
 
 PLATFORMS
   ruby
-  x86-mingw32
 
 DEPENDENCIES
   bundler
+  coveralls
   notifier
   rake
   rspec
-  ruby-snarl
   test_notifier
   version_info!
