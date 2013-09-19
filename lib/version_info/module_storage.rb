@@ -22,7 +22,7 @@ module VersionInfo
 
     def save      
       content = File.read(file_name)
-      content.gsub!(/(\s*VERSION\s*=\s*)('|").*('|")/, "\\1\\2#{tag}\\3")
+      content.gsub!(/(\s*VERSION\s*=\s*)('|").*('|")/, "\\1\\2#{data.tag}\\3")
 	    File.open(file_name, 'w' ) {|out| out.print content}
 	    self
     end
