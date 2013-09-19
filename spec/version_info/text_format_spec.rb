@@ -9,7 +9,7 @@ describe "Text file format" do
   end
 
   it "has default filename" do
-    @test_module::VERSION.file_name.should ==  Dir.pwd + '/' + 'VERSION'
+    @test_module::VERSION.file_name.should == Dir.pwd + '/' + 'VERSION'
   end
 
   it "is initalized" do

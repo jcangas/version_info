@@ -7,7 +7,7 @@ module VersionInfo
   #
   # The convenion is to name this file "VERSION"
     
-  module TextStorage
+  class TextStorage < Storage
     
     def default_file_name
       'VERSION'
@@ -18,14 +18,14 @@ module VersionInfo
       content = io.readlines
       str = content.shift
       custom = content.inject({}) {|result, line| k, v = line.chomp.split(':'); result[k.strip.to_sym] = v.strip; result}
-      self.set_version_info(str)
-      self.to_hash.merge!(custom)
+      data.set_version_info(str)
+      data.to_hash.merge!(custom)
       self
     end
 
     def save_to(io)
-      io.puts VersionInfo.segments.map{|sgm| send(sgm)}.join('.')
-      to_hash.each {|k, v| io.puts "#{k}: #{v}" unless VersionInfo.segments.include?(k) }
+      io.puts VersionInfo.segments.map{|sgm| data.send(sgm)}.join('.')
+      data.to_hash.each {|k, v| io.puts "#{k}: #{v}" unless VersionInfo.segments.include?(k) }
 	    self      
     end
   end

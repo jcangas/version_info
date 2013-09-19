@@ -10,7 +10,7 @@ module VersionInfo
   #
   # The convenion is to name this file "version.rb"
 
-  module ModuleStorage
+  class ModuleStorage < Storage
 
     def default_file_name
       'version.rb'

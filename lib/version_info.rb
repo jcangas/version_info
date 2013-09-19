@@ -1,3 +1,4 @@
+require 'version_info/storage'
 require 'version_info/data'
 
 module VersionInfo
@@ -16,6 +17,10 @@ module VersionInfo
     @file_format ||= :module
   end
   
+  def self.file_format=(value)
+    @file_format = value
+  end
+
   def self.install_tasks(options)
     if defined?(Rake)
       require 'version_info/rake_tasks' 
@@ -24,10 +29,6 @@ module VersionInfo
       require 'version_info/thor_tasks'
       ThorTasks.install(options)
     end
-  end
-
-  def self.file_format=(value)
-    @file_format = value
   end
 
   def self.included(other)

@@ -9,7 +9,7 @@ module VersionInfo
   # patch: 4
   # author: jcangas
 
-  module YamlStorage
+  class YamlStorage < Storage
     def default_file_name
       'version_info.yml'
     end
@@ -18,12 +18,12 @@ module VersionInfo
       values = YAML.load(io)
       # force keys as symbols
 	    values.keys.each{|k| values[k.to_sym] = values.delete(k)}
-      assign(values)
+      data.assign(values)
       self
     end
 
     def save_to(io)
-	    values = self.to_hash.keys.compact.inject({}){|r, k| r[k.to_s] = send(k); r }
+	    values = data.to_hash.keys.compact.inject({}){|r, k| r[k.to_s] = data.send(k); r }
       YAML.dump(values, io)
 	    self      
     end
