@@ -5,12 +5,11 @@ module VersionInfo
     def initialize(data)
       super()
       @data = data
+      load if file_name && File.exist?(file_name)
     end
     
     def file_name
       @file_name ||= Dir.pwd + '/' + default_file_name
-      load if @file_name && File.exist?(@file_name)
-      @file_name
     end
 
     def file_name=(value)

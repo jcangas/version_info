@@ -13,7 +13,7 @@ module VersionInfo
     end
     
     def file_name
-      storage.file_name 
+      storage.file_name      
     end
 
     def file_name=(value)
