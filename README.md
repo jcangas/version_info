@@ -1,8 +1,9 @@
 ## VersionInfo
 
-### Travis CI status
+### Current status
 
 [![Build Status](https://secure.travis-ci.org/jcangas/version_info.png)](http://travis-ci.org/jcangas/version_info)
+[![Gem Version](https://badge.fury.io/rb/version_info.png)](http://badge.fury.io/rb/version_info)
 
 ### Install
 
