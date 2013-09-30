@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.version     = VersionInfo::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jorge L. Cangas"]
+  s.license = 'MIT'
   s.email       = ["jorge.cangas@gmail.com"]
   s.homepage    = "http://github.com/jcangas/version_info"
   s.summary     = %q{A Ruby gem to manage your project version data. Rake tasks included!}
