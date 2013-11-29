@@ -282,50 +282,6 @@
         null,
         null
       ],
-      "Z:/Projects/github/version_info/spec/version_info/module_format_spec.rb": [
-        1,
-        null,
-        1,
-        1,
-        6,
-        null,
-        6,
-        6,
-        6,
-        null,
-        null,
-        1,
-        1,
-        null,
-        null,
-        1,
-        1,
-        null,
-        null,
-        1,
-        1,
-        null,
-        null,
-        1,
-        1,
-        null,
-        null,
-        1,
-        1,
-        1,
-        1,
-        null,
-        null,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        null,
-        null,
-        null
-      ],
       "Z:/Projects/github/version_info/spec/version_info/text_format_spec.rb": [
         1,
         null,
@@ -521,6 +477,6 @@
         null
       ]
     },
-    "timestamp": 1379663599
+    "timestamp": 1385719424
   }
 }
