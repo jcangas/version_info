@@ -29,3 +29,5 @@ if Notifier.os?(/mingw32/)
 		end
 	end
 end
+
+TestNotifier.default_notifier = :growl

@@ -61,7 +61,14 @@ module VersionInfo
     end
     
     def tag_format
-	    @tag_format ||= VersionInfo.segments.map { |k| "%<#{k}>d"}.join('.')
+	    unless @tag_format
+        fmts = VersionInfo.segments.map { |k| "%<#{k}>s"}
+        fmt_join = VersionInfo.segments.map { |k| "." }
+        fmt_join[2] = '+' #build uses '+'. See semver.org
+        fmt_join[-1] = '' #remove last char
+        @tag_format = fmts.zip(fmt_join).flatten.join
+      end
+      @tag_format
     end
 
     def tag_format=(value)
@@ -69,12 +76,16 @@ module VersionInfo
     end
 
     def set_version_info(tag_str)
-      values = tag_str.to_s.split('.')
-      VersionInfo.segments.each{|sgm| self.send("#{sgm}=", values.shift.match(/(\d+)/).to_s.to_i) }
+      values = tag_str.to_s.split(/\.|\+|\-/)
+      values.each_with_index do |val, idx|
+        val = val.to_s.chomp
+        val = val.match(/(^\d+)$/) ? val.to_i : val
+        self.send("#{VersionInfo.segment_at(idx)}=", val )
+      end
     end
 
     def get_defaults
-      VersionInfo.segments[0..2].inject({}){|h, k| h[k] = 0; h}
+      VersionInfo.segments.inject({}){|h, k| h[k] = 0; h}
     end   
   end
 end
