@@ -8,6 +8,12 @@ module VersionInfo
     @segments ||= [:major, :minor, :patch] 
   end
 
+  def self.segment_at(idx)
+    segments << :build if (segments.size == 3) && (idx>=3)
+    (segments.size..idx).each{|n| segments << "vinfo#{n}".to_sym}
+    @segments[idx]
+  end
+
   # define segments
   def self.segments=(values)
     @segments = values

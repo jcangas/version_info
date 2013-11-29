@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Text file format" do
   before :each do
     VersionInfo.file_format = :text
+    VersionInfo.segments = nil
     @test_module = Module.new
     @test_module.send :include, VersionInfo
     @test_module::VERSION.file_name = nil
@@ -29,12 +30,12 @@ describe "Text file format" do
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
     @test_module::VERSION.author = 'jcangas'
-    @test_module::VERSION.email = 'jorge.cangas@gmail.com'
+    @test_module::VERSION.email = 'jcangas@example.com'
     @test_module::VERSION.save
     io.string.should == <<END
 0.1.0
 author: jcangas
-email: jorge.cangas@gmail.com
+email: jcangas@example.com
 END
 
   end
@@ -43,7 +44,21 @@ END
     io = StringIO.new("1.2.3")
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
-    @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
+    @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3}  
+  end
+
+  it "auto expand segments " do
+    io = StringIO.new("1.2.3.B4.5")
+    File.should_receive(:open).and_yield(io)
+    @test_module::VERSION.load
+    @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :build => 'B4', :vinfo4 => 5  }  
+  end
+
+  it "auto expand for build uses semvar.org tag format " do
+    io = StringIO.new("1.2.3.B4.5")
+    File.should_receive(:open).and_yield(io)
+    @test_module::VERSION.load
+    @test_module::VERSION.tag.should == "1.2.3+B4.5"  
   end
 
   it "can load custom data " do

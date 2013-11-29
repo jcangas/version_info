@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Yaml file format" do
   before :each do
     VersionInfo.file_format = :yaml
+    VersionInfo.segments = nil
     @test_module = Module.new
     @test_module.send :include, VersionInfo
     @test_module::VERSION.file_name = nil
