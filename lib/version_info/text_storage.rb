@@ -23,7 +23,7 @@ module VersionInfo
     end
 
     def save_to(io)
-      io.puts VersionInfo.segments.map{|sgm| data.send(sgm)}.join('.')
+      io.puts data.tag #VersionInfo.segments.map{|sgm| data.send(sgm)}.join('.')
       data.to_hash.each {|k, v| io.puts "#{k}: #{v}" unless VersionInfo.segments.include?(k) }
 	    self      
     end
