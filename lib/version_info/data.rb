@@ -40,9 +40,9 @@ module VersionInfo
     end
 
     def bump(key)
-      idx = VersionInfo.segments.index(key.to_sym) + 1
+      idx = segments.index(key.to_sym) + 1
       return unless idx
-      VersionInfo.segments[idx..-1].each do |sgm| 
+      segments[idx..-1].each do |sgm| 
 	      send("#{sgm}=", 0) if send(sgm)
       end
       send("#{key}=", 1 + send(key).to_i)
@@ -61,14 +61,14 @@ module VersionInfo
     end
     
     def tag_format
-	    unless @tag_format
-        fmts = VersionInfo.segments.map { |k| "%<#{k}>s"}
-        fmt_join = VersionInfo.segments.map { |k| "." }
-        fmt_join[2] = '+' #build uses '+'. See semver.org
-        fmt_join[-1] = '' #remove last char
+      unless @tag_format
+        fmts = segments.map { |k| "%<#{k}>s"}
+        fmt_join = segments.map { |k| "." }
+        fmt_join[2] = '+' if fmts.size > 2 #build uses '+'. See semver.org
+        fmt_join[-1] = '' if fmt_join.size > 0 #remove last char
         @tag_format = fmts.zip(fmt_join).flatten.join
       end
-      @tag_format
+        @tag_format
     end
 
     def tag_format=(value)
@@ -76,12 +76,22 @@ module VersionInfo
     end
 
     def set_version_info(tag_str)
+      clear  
       values = tag_str.to_s.split(/\.|\+|\-/)
       values.each_with_index do |val, idx|
         val = val.to_s.chomp
         val = val.match(/(^\d+)$/) ? val.to_i : val
         self.send("#{VersionInfo.segment_at(idx)}=", val )
       end
+    end
+
+    def segments
+      @table.keys
+    end
+
+    def clear
+      segments.each{|key| delete_field(key)}
+      @tag_format = nil
     end
 
     def get_defaults
