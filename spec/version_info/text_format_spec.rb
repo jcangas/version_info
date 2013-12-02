@@ -47,14 +47,24 @@ END
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3}  
   end
 
-  it "auto expand segments " do
+  it "auto add segments on load" do
     io = StringIO.new("1.2.3.B4.5")
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :build => 'B4', :vinfo4 => 5  }  
   end
 
-  it "auto expand for build uses semvar.org tag format " do
+  it "can save custom tag format" do
+    @test_module::VERSION.set_version_info("1.2.3+B4.5")
+    io = StringIO.new
+    File.should_receive(:open).and_yield(io)
+    @test_module::VERSION.save
+    io.string.should == <<END
+1.2.3+B4.5
+END
+  end
+
+  it "auto add build segment uses semvar.org tag format " do
     io = StringIO.new("1.2.3.B4.5")
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
@@ -62,20 +72,9 @@ END
   end
 
   it "can load custom data " do
-    io = StringIO.new("1.2.3\nauthor: jcangas\n")
+    io = StringIO.new("1.2.3+B4.5\nauthor: jcangas\n")
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.load
-    @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
+    @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :build => 'B4', :vinfo4 => 5, :author => 'jcangas' }  
   end
-
-  it "can load after save custom tag" do
-    io = StringIO.new("1.2.3.B4.5")
-    File.should_receive(:open).and_yield(io)
-    @test_module::VERSION.load
-    @test_module::VERSION.bump(:minor)
-    @test_module::VERSION.save
-    @test_module::VERSION.load
-    @test_module::VERSION.tag.should == "1.2.3+B4.5"  
-  end
-
 end

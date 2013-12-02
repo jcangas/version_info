@@ -51,10 +51,11 @@ describe "VersionInfo defaults" do
     @test_module::VERSION.tag.should == '0.1.1'    
   end
 
-  it "bump a segment reset sublevels " do
+  it "bump a segment reset semver sublevels " do
+    @test_module::VERSION.set_version_info("1.2.3+B4.5")
     @test_module::VERSION.bump(:patch)
     @test_module::VERSION.bump(:minor)
-    @test_module::VERSION.tag.should == '0.1.0'   
+    @test_module::VERSION.tag.should == "1.3.0+B4.5"   
   end
 
 end

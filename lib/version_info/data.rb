@@ -44,7 +44,7 @@ module VersionInfo
     def bump(key)
       idx = segments.index(key.to_sym) + 1
       return unless idx
-      segments[idx..-1].each do |sgm| 
+      segments[idx..2].each do |sgm| 
 	      send("#{sgm}=", 0) if send(sgm)
       end
       send("#{key}=", 1 + send(key).to_i)
@@ -85,6 +85,7 @@ module VersionInfo
         val = val.match(/(^\d+)$/) ? val.to_i : val
         self.send("#{segment_at(idx)}=", val )
       end
+      self
     end
 
     def segment_at(idx)
