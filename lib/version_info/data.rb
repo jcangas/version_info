@@ -3,8 +3,9 @@ require 'ostruct'
 module VersionInfo
   STORAGE_CLASS = {text: TextStorage, yaml: YamlStorage, module: ModuleStorage}
   class Data < OpenStruct
-    def initialize
-      super
+    def initialize(segments)
+      super()
+      @segments = segments.dup
       reset
     end
     
@@ -32,6 +33,7 @@ module VersionInfo
     end
     
     def reset
+      clear
       assign(get_defaults)
     end
     
@@ -63,12 +65,12 @@ module VersionInfo
     def tag_format
       unless @tag_format
         fmts = segments.map { |k| "%<#{k}>s"}
-        fmt_join = segments.map { |k| "." }
+        fmt_join = fmts.map { |k| "." }
         fmt_join[2] = '+' if fmts.size > 2 #build uses '+'. See semver.org
         fmt_join[-1] = '' if fmt_join.size > 0 #remove last char
         @tag_format = fmts.zip(fmt_join).flatten.join
       end
-        @tag_format
+      @tag_format
     end
 
     def tag_format=(value)
@@ -76,26 +78,32 @@ module VersionInfo
     end
 
     def set_version_info(tag_str)
-      clear  
+      clear
       values = tag_str.to_s.split(/\.|\+|\-/)
       values.each_with_index do |val, idx|
         val = val.to_s.chomp
         val = val.match(/(^\d+)$/) ? val.to_i : val
-        self.send("#{VersionInfo.segment_at(idx)}=", val )
+        self.send("#{segment_at(idx)}=", val )
       end
     end
 
+    def segment_at(idx)
+      @segments << :build if (@segments.size == 3) && (idx>=3)
+      (@segments.size..idx).each{|n| @segments << "vinfo#{n}".to_sym}
+      @segments[idx]
+    end
+
     def segments
-      @table.keys
+      @segments
     end
 
     def clear
-      segments.each{|key| delete_field(key)}
+      segments.each{|key| delete_field(key) if @table.has_key?(key)}
       @tag_format = nil
     end
 
     def get_defaults
-      VersionInfo.segments.inject({}){|h, k| h[k] = 0; h}
+      segments.inject({}){|h, k| h[k] = 0; h}
     end   
   end
 end

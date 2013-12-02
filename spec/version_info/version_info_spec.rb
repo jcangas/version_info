@@ -10,9 +10,14 @@ describe "VersionInfo defaults" do
 
     @test_module::VERSION.file_name = nil
   end
+  after :each do
+    @test_module = nil
+  end
 
   it "is initalized" do
+    @test_module::VERSION.segments.should == [:major, :minor, :patch]
     @test_module::VERSION.to_hash.should == {:major => 0, :minor => 0, :patch => 0 }
+    @test_module::VERSION.tag_format.should == "%<major>s.%<minor>s.%<patch>s"
   end
 
   it "can assign filename" do
@@ -30,17 +35,20 @@ describe "VersionInfo defaults" do
 
   it "tag has format" do
     @test_module::VERSION.tag.should == '0.0.0'    
+    @test_module::VERSION.tag_format.should == "%<major>s.%<minor>s.%<patch>s"
   end
 
   it "tag format can be changed" do
+    @test_module::VERSION.set_version_info('0.0.0.0')
     @test_module::VERSION.build_flag = 'pre'
-    @test_module::VERSION.tag_format = @test_module::VERSION.tag_format + "--%<build_flag>s"
-    @test_module::VERSION.tag.should == '0.0.0--pre'    
+    @test_module::VERSION.tag_format = "%<major>d.%<minor>d.%<patch>d-%<build_flag>s%<build>d"
+    @test_module::VERSION.tag.should == '0.0.0-pre0'    
   end
 
   it "can bump a segment" do
+    @test_module::VERSION.bump(:minor)
     @test_module::VERSION.bump(:patch)
-    @test_module::VERSION.tag.should == '0.0.1'    
+    @test_module::VERSION.tag.should == '0.1.1'    
   end
 
   it "bump a segment reset sublevels " do
