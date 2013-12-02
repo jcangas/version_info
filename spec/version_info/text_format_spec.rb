@@ -68,4 +68,14 @@ END
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end
 
+  it "can load after save custom tag" do
+    io = StringIO.new("1.2.3.B4.5")
+    File.should_receive(:open).and_yield(io)
+    @test_module::VERSION.load
+    @test_module::VERSION.bump(:minor)
+    @test_module::VERSION.save
+    @test_module::VERSION.load
+    @test_module::VERSION.tag.should == "1.2.3+B4.5"  
+  end
+
 end
