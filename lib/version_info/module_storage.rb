@@ -16,15 +16,29 @@ module VersionInfo
       'version.rb'
     end
 
-    def load_from(io)
+    def load_content
+      File.readlines(file_name)
+    end
+    
+    def load
+      content = load_content
+      parse_from(content)
+      self
+    end
+
+    def parse_from(content)
+      match = content.join.match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
+      str = match[3]
+      data.set_version_info(str)
       self
     end
 
     def save      
-      content = File.read(file_name)
+      content = load_content.join
       content.gsub!(/(\s*VERSION\s*=\s*)('|").*('|")/, "\\1\\2#{data.tag}\\3")
 	    File.open(file_name, 'w' ) {|out| out.print content}
 	    self
+      content
     end
 
   end

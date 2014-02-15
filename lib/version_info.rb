@@ -46,11 +46,11 @@ module VersionInfo
       define_method :VERSION do
         @data ||= self::VERSION
       end    
-       define_method :"VERSION=" do |value_str|
+      define_method :"VERSION=" do |value_str|
         self.VERSION.set_version_info(value_str)
       end    
     end
-    other.VERSION= old_const if old_const
+    other.VERSION= old_const.to_s if old_const
   end
 
 end
