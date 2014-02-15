@@ -50,7 +50,7 @@ module Test
   self.VERSION.file_name = __FILE__
 end
 END
-    File.should_receive(:read).and_return(content)
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content.lines)
     io = StringIO.new
     File.should_receive(:open).and_yield(io)
     @test_module::VERSION.bump(:minor)
@@ -61,6 +61,32 @@ module Test
   include VersionInfo
   self.VERSION = "#{@test_module.VERSION.tag}"
   self.VERSION.file_name = __FILE__
+end
+END
+  end
+
+  it "can save as delphi" do
+    content = <<END
+TVersionInfo = class
+public  
+const
+  VERSION = '0.2.0';
+end
+END
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content.lines)
+    @test_module::VERSION.load
+    @test_module::VERSION.storage.data.tag.should ==  "0.2.0"
+    @test_module::VERSION.bump(:minor)
+    @test_module::VERSION.storage.data.tag.should ==  "0.3.0"
+    io = StringIO.new
+    File.should_receive(:open).and_yield(io)
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content.lines)
+    @test_module::VERSION.save
+    io.string.should == <<END
+TVersionInfo = class
+public  
+const
+  VERSION = '0.3.0';
 end
 END
   end
