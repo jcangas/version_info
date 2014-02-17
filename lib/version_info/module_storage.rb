@@ -17,14 +17,15 @@ module VersionInfo
     end
 
     def parse_from(content)
-      match = content.join("\n").match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
-      str = match ? match[3] : ""
+      match = content.join.match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
+      str = match ? match[3] : "0.0.0"
       data.set_version_info(str)
       self
     end
 
     def save      
       content = load_content.join
+      content = "VERSION = '#{data.tag}'" if content.empty?
       content.gsub!(/(\s*VERSION\s*=\s*)('|").*('|")/, "\\1\\2#{data.tag}\\3")
 	    File.open(file_name, 'w' ) {|out| out.print content}
 	    self
