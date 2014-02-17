@@ -16,19 +16,9 @@ module VersionInfo
       'version.rb'
     end
 
-    def load_content
-      File.readlines(file_name)
-    end
-    
-    def load
-      content = load_content
-      parse_from(content)
-      self
-    end
-
     def parse_from(content)
-      match = content.join.match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
-      str = match[3]
+      match = content.join("\n").match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
+      str = match ? match[3] : ""
       data.set_version_info(str)
       self
     end
