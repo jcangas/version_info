@@ -18,7 +18,7 @@ module VersionInfo
 
     def parse_from(content)
       match = content.join("\n").match /(\s*VERSION\s*=\s*)('|")(.*)('|")/
-      str = match[3]
+      str = match ? match[3] : ""
       data.set_version_info(str)
       self
     end
