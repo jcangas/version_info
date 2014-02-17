@@ -17,10 +17,22 @@ describe "Text file format" do
     @test_module::VERSION.to_hash.should == {:major => 0, :minor => 0, :patch => 0 }
   end
 
+  it "has tag str" do
+    @test_module::VERSION.tag.should == "0.0.0"
+  end
+
+  it "can bump minor" do
+    @test_module::VERSION.bump(:minor)
+    @test_module::VERSION.storage.data.should ==  @test_module::VERSION
+    @test_module::VERSION.storage.data.to_hash.should == {:major => 0, :minor => 1, :patch => 0 }
+    @test_module::VERSION.storage.data.tag.should == "0.1.0"
+    @test_module::VERSION.to_hash.should == {:major => 0, :minor => 1, :patch => 0 }
+  end
+
   it "can save " do
+    @test_module::VERSION.bump(:minor)
     io = StringIO.new
     File.should_receive(:open).and_yield(io)
-    @test_module::VERSION.bump(:minor)
     @test_module::VERSION.save
     io.string.should == "0.1.0\n"
   end

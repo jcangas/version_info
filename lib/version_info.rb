@@ -40,7 +40,7 @@ module VersionInfo
       old_const = other.const_get(:VERSION, false) 
       other.send(:remove_const, :VERSION) rescue true
     end
-    other.const_set(:VERSION, Data.new(VersionInfo.segments))
+    other.const_set(:VERSION, Data.new(VersionInfo.segments.dup))
     singleton = other.singleton_class
     singleton.class_eval do
       define_method :VERSION do

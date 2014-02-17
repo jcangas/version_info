@@ -1,19 +1,17 @@
 module VersionInfo
   class Storage
-    attr :data
     
     def initialize(data)
       super()
       @data = data
-      load if file_name && File.exist?(file_name)
     end
     
-    def file_name
-      @file_name ||= Dir.pwd + '/' + default_file_name
+    def data
+      @data
     end
 
-    def file_name=(value)
-      @file_name = value
+    def file_name
+      @data.file_name
     end
 
     def load_content

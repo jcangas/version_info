@@ -5,21 +5,24 @@ module VersionInfo
   class Data < OpenStruct
     def initialize(segments)
       super()
-      @segments = segments.dup
+      @segments = segments
       reset
     end
     
     def storage
-      @storage ||= STORAGE_CLASS[VersionInfo.file_format.to_sym].new(self)
+      unless @storage
+        @storage ||= STORAGE_CLASS[VersionInfo.file_format.to_sym].new(self)
+      end
+      @storage
     end
     
     def file_name
-      storage.file_name      
+      @file_name ||= Dir.pwd + '/' + storage.default_file_name
     end
 
     def file_name=(value)
+      @file_name = value
       @storage = nil #recreate storage
-      storage.file_name = value
     end
     
     def load
