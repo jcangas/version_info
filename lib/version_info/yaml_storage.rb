@@ -14,8 +14,8 @@ module VersionInfo
       'version_info.yml'
     end
 
-    def load_from(io)
-      values = YAML.load(io)
+    def parse_from(content)
+      values = YAML.load(content.join("\n"))
       # force keys as symbols
 	    values.keys.each{|k| values[k.to_sym] = values.delete(k)}
       data.assign(values)

@@ -36,15 +36,15 @@ describe "Yaml file format" do
   end
 
   it "can load " do
-    io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\n")
-    File.should_receive(:open).and_yield(io)
+    content = ["--- ", "major: 1", "minor: 2", "patch: 3"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3 }  
   end
 
   it "can load custom data " do
-    io = StringIO.new("--- \nmajor: 1\nminor: 2\npatch: 3\nauthor: jcangas\n")
-    File.should_receive(:open).and_yield(io)
+    content = ["--- ", "major: 1", "minor: 2", "patch: 3", "author: jcangas"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :author => 'jcangas' }  
   end

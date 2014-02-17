@@ -12,13 +12,18 @@ module VersionInfo
     def default_file_name
       'VERSION'
     end
-    
-    def load_content(io)
-      io.readlines
+
+    def load_content
+      File.exist?(file_name) ? File.readlines(file_name) : [""]
     end
     
-    def load_from(io)
-      content = load_content(io)
+    def load
+      content = load_content
+      parse_from(content)
+      self
+    end
+
+    def parse_from(content)
       str = content.shift
       custom = content.inject({}) {|result, line| k, v = line.chomp.split(':'); result[k.strip.to_sym] = v.strip; result}
       data.set_version_info(str)

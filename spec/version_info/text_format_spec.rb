@@ -41,15 +41,15 @@ END
   end
 
   it "can load " do
-    io = StringIO.new("1.2.3")
-    File.should_receive(:open).and_yield(io)
+    content = ["1.2.3"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3}  
   end
 
   it "auto add segments on load" do
-    io = StringIO.new("1.2.3.B4.5")
-    File.should_receive(:open).and_yield(io)
+    content = ["1.2.3.B4.5"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :build => 'B4', :vinfo4 => 5  }  
   end
@@ -65,15 +65,15 @@ END
   end
 
   it "auto add build segment uses semvar.org tag format " do
-    io = StringIO.new("1.2.3.B4.5")
-    File.should_receive(:open).and_yield(io)
+    content = ["1.2.3.B4.5"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.tag.should == "1.2.3+B4.5"  
   end
 
   it "can load custom data " do
-    io = StringIO.new("1.2.3+B4.5\nauthor: jcangas\n")
-    File.should_receive(:open).and_yield(io)
+    content = ["1.2.3+B4.5","author: jcangas"]
+    @test_module::VERSION.storage.should_receive(:load_content).and_return(content)
     @test_module::VERSION.load
     @test_module::VERSION.to_hash.should == {:major => 1, :minor => 2, :patch => 3, :build => 'B4', :vinfo4 => 5, :author => 'jcangas' }  
   end

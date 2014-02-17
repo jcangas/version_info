@@ -16,8 +16,13 @@ module VersionInfo
       @file_name = value
     end
 
+    def load_content
+      File.exist?(file_name) ? File.readlines(file_name) : [""]
+    end
+    
     def load
-      File.open(file_name, 'r') {|io| load_from(io)}
+      content = load_content
+      parse_from(content)
       self
     end
 
